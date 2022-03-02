@@ -81,6 +81,7 @@ const displayDetails = details => {
     const div = document.createElement('div')
 
     // Checking the relise date avaibality 
+
     const getDate = () => {
         if (details.data.releaseDate === "") {
             return 'No relase date found'
@@ -88,18 +89,7 @@ const displayDetails = details => {
         else { return `${details.data.releaseDate}` }
     }
 
-    // const getSensors = sensors => {
-    //     sensors.forEach(sensor =>
-    //         sensor
-    //     )
 
-    // }
-    const getSensors = sensors => {
-        sensors.forEach(sensor => {
-            console.log(sensor)
-        })
-
-    }
 
     const detailsInformation = `
     <div class="card mb-3 m-auto mt-2" style="max-width: 540px;">
@@ -118,7 +108,7 @@ const displayDetails = details => {
                                 <li>Memory:${details.data.mainFeatures.memory}</li>
                                 <li>Release Date: ${getDate()} </li>
                             </ul>
-                            <p class="card-text">Sensors:${getSensors(details.data.mainFeatures.sensors)}</p>
+                            <p class="card-text"><h5>Sensors:</h5>${details.data.mainFeatures.sensors.join()}</p>
                         </div>
                     </div>
                 </div>
