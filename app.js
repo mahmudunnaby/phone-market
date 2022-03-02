@@ -1,6 +1,8 @@
 
 const searchInput = () => {
     document.getElementById('resultsContainer').innerHTML = ''
+    document.getElementById('detailsContainer').innerHTML = ''
+
     // Catching the input data 
     const inputText = document.getElementById('input').value
     const inputData = inputText.toLowerCase()
@@ -9,40 +11,31 @@ const searchInput = () => {
     const url = `https://openapi.programming-hero.com/api/phones?search=${inputData}`
     fetch(url)
         .then(responce => responce.json())
-        .then(data => getPhoneResults(data.data))
+        .then(data => getPhoneResults(data.data.slice(0, 20)))
+
 
 }
 
 
+
+
 const getPhoneResults = phones => {
-    // console.log(phones)
+
 
     // Getting the number of available results 
     const numResults = document.getElementById('numberOfResults')
     numResults.innerText = phones.length
-    // console.log(phones.length)
+
+    //No results found display
+    if (phones.length == 0) {
+        document.getElementById('no-results').style.display = 'block'
+
+    }
+    else if (phones.length != 0) {
+        document.getElementById('no-results').style.display = 'none'
+    }
 
 
-
-    // for (const phone of phones) {
-
-    //     const div = document.createElement('div')
-    //     div.classList = 'card text-center col-sm-12 col-md-3  mx-3 my-3'
-
-    //     const informationOfPhone = `
-
-    //     <img src="${phone.image}" class="card-img-top img-fluid" alt="...">
-    //     <div class="card-body">
-    //         <h5 class="card-title">Name:${phone.phone_name}</h5>
-    //         <h5 class="card-title">Brand: ${phone.brand}</h5>
-    //         <button onclick="getDetailsPhone(${phone.slug})" class="btn btn-primary ">Details</button>
-    //     </div>`
-
-
-    //     div.innerHTML = informationOfPhone
-    //     document.getElementById('resultsContainer').appendChild(div)
-
-    // }
 
 
     phones.forEach(phone => {
@@ -51,8 +44,9 @@ const getPhoneResults = phones => {
         div.classList = 'card text-center col-sm-12 col-md-3  mx-3 my-3'
 
         const informationOfPhone = `
-
-        <img src="${phone.image}" class="card-img-top img-fluid" alt="...">
+        <div class=" d-flex justify-content-center">
+        <img src="${phone.image}" class="card-img-top img-fluid w-50 p-3" alt="...">
+        </div>
         <div class="card-body">
             <h5 class="card-title">Name:${phone.phone_name}</h5>
             <h5 class="card-title">Brand: ${phone.brand}</h5>
@@ -76,8 +70,11 @@ const getDetailsPhone = id => {
         .then(data => displayDetails(data))
 }
 
+// Display details information of the phone 
+
+
 const displayDetails = details => {
-    console.log(details)
+
 
     const div = document.createElement('div')
 
@@ -96,34 +93,26 @@ const displayDetails = details => {
             return `${key} : ${value}`
         }
 
-        // const otherProperty = Object.entries(other)
 
-        // console.log(otherProperty)
-        // console.log(Object.entries(other))
-        // console.log(other, typeof (other))
     }
-    // const otherFeatures = other => {
 
-    //     console.log(Object.entries(other).join(`<br>`))
-    //     // console.log(other, typeof (other))
-    // }
 
 
     const detailsInformation = `
     <div class="card mb-3 m-auto mt-2" style="max-width: 1040px;">
                 <div class="row g-0">
-                    <div class="col-md-4">
+                    <div class="col-md-4 d-flex justify-content-center align-items-center">
                         <img src="${details.data.image}" class="img-fluid rounded-start" alt="...">
                     </div>
                     <div class="col-md-8">
                         <div class="card-body">
-                            <h4 class="card-title">Name:${details.data.name}</h4>
-                            <h4 class="card-title">Brand:${details.data.brand}</h4>
-                            <h5 class="card-title">Main Features:</h5>
+                            <h4 class="card-title">Name: ${details.data.name}</h4>
+                            <h4 class="card-title">Brand: ${details.data.brand}</h4>
+                            <h5 class="card-title">Main Features: </h5>
                             <ul>
-                                <li>Storage:${details.data.mainFeatures.storage}</li>
-                                <li>Display Size:${details.data.mainFeatures.displaySize}</li>
-                                <li>Memory:${details.data.mainFeatures.memory}</li>
+                                <li>Storage: ${details.data.mainFeatures.storage}</li>
+                                <li>Display Size: ${details.data.mainFeatures.displaySize}</li>
+                                <li>Memory: ${details.data.mainFeatures.memory}</li>
                                 <li>Release Date: ${getDate()} </li>
                             </ul>
                             <p class="card-text"><h5>Sensors:</h5>${details.data.mainFeatures.sensors.join()}</p>
@@ -134,7 +123,7 @@ const displayDetails = details => {
             </div>
     
     `
-    // console.log(details.data.mainFeatures.sensors)
+
 
 
     div.innerHTML = detailsInformation
