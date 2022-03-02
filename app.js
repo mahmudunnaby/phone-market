@@ -70,9 +70,67 @@ const getPhoneResults = phones => {
 
 const getDetailsPhone = id => {
     const url = `https://openapi.programming-hero.com/api/phone/${id}`
-    console.log(url)
-    // fetch(url)
-    //     .then(responce => responce.json())
-    //     .then(data => console.log(data))
+    fetch(url)
+        .then(responce => responce.json())
+        .then(data => displayDetails(data))
 }
 
+const displayDetails = details => {
+    console.log(details)
+
+    const div = document.createElement('div')
+
+    // Checking the relise date avaibality 
+    const getDate = () => {
+        if (details.data.releaseDate === "") {
+            return 'No relase date found'
+        }
+        else { return `${details.data.releaseDate}` }
+    }
+
+    // const getSensors = sensors => {
+    //     sensors.forEach(sensor =>
+    //         sensor
+    //     )
+
+    // }
+    const getSensors = sensors => {
+        sensors.forEach(sensor => {
+            console.log(sensor)
+        })
+
+    }
+
+    const detailsInformation = `
+    <div class="card mb-3 m-auto mt-2" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="${details.data.image}" class="img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h4 class="card-title">Name:${details.data.name}</h4>
+                            <h4 class="card-title">Brand:${details.data.brand}</h4>
+                            <h5 class="card-title">Main Features:</h5>
+                            <ul>
+                                <li>Storage:${details.data.mainFeatures.storage}</li>
+                                <li>Display Size:${details.data.mainFeatures.displaySize}</li>
+                                <li>Memory:${details.data.mainFeatures.memory}</li>
+                                <li>Release Date: ${getDate()} </li>
+                            </ul>
+                            <p class="card-text">Sensors:${getSensors(details.data.mainFeatures.sensors)}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+    `
+    // console.log(details.data.mainFeatures.sensors)
+
+
+    div.innerHTML = detailsInformation
+    document.getElementById('detailsContainer').appendChild(div)
+
+
+
+}
