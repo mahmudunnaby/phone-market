@@ -1,6 +1,6 @@
 
 const searchInput = () => {
-
+    document.getElementById('resultsContainer').innerHTML = ''
     // Catching the input data 
     const inputText = document.getElementById('input').value
     const inputData = inputText.toLowerCase()
@@ -69,6 +69,7 @@ const getPhoneResults = phones => {
 
 
 const getDetailsPhone = id => {
+    document.getElementById('detailsContainer').innerHTML = ''
     const url = `https://openapi.programming-hero.com/api/phone/${id}`
     fetch(url)
         .then(responce => responce.json())
@@ -89,10 +90,27 @@ const displayDetails = details => {
         else { return `${details.data.releaseDate}` }
     }
 
+    const otherFeatures = other => {
+
+        for (const [key, value] of Object.entries(other)) {
+            return `${key} : ${value}`
+        }
+
+        // const otherProperty = Object.entries(other)
+
+        // console.log(otherProperty)
+        // console.log(Object.entries(other))
+        // console.log(other, typeof (other))
+    }
+    // const otherFeatures = other => {
+
+    //     console.log(Object.entries(other).join(`<br>`))
+    //     // console.log(other, typeof (other))
+    // }
 
 
     const detailsInformation = `
-    <div class="card mb-3 m-auto mt-2" style="max-width: 540px;">
+    <div class="card mb-3 m-auto mt-2" style="max-width: 1040px;">
                 <div class="row g-0">
                     <div class="col-md-4">
                         <img src="${details.data.image}" class="img-fluid rounded-start" alt="...">
@@ -109,6 +127,7 @@ const displayDetails = details => {
                                 <li>Release Date: ${getDate()} </li>
                             </ul>
                             <p class="card-text"><h5>Sensors:</h5>${details.data.mainFeatures.sensors.join()}</p>
+                            <p class="card-text"><h5>Others:</h5>${otherFeatures(details.data.others)}</p>
                         </div>
                     </div>
                 </div>
